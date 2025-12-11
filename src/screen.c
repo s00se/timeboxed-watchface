@@ -101,13 +101,14 @@ void bt_handler(bool connected) {
 void battery_handler(BatteryChargeState charge_state) {
     if (is_module_enabled(MODULE_BATTERY)) {
         char s_battery_buffer[8];
+        int rounded_percentage = (charge_state.charge_percent / 5) * 5;
 
         if (charge_state.is_charging) {
             snprintf(s_battery_buffer, sizeof(s_battery_buffer), "chg");
         } else {
-            snprintf(s_battery_buffer, sizeof(s_battery_buffer), (charge_state.charge_percent < 20 ? "! %d%%" : "%d%%"), charge_state.charge_percent);
+              snprintf(s_battery_buffer, sizeof(s_battery_buffer), (rounded_percentage < 20 ? "! %d%%" : "%d%%"), rounded_percentage);
         }
-        set_battery_color(charge_state.charge_percent);
+        set_battery_color(rounded_percentage);
         set_battery_layer_text(s_battery_buffer);
     } else {
         set_battery_layer_text("");

@@ -633,9 +633,9 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
         #else
         request_update_from_js();
         #endif
-
+        if (tick_time->tm_min % 5 == 0) {
         update_time();
-
+        }
         if (!is_update_disabled() && tick_time->tm_hour == 4 && tick_time->tm_min == 0) { // updates at 4:00am
             check_for_updates();
         }
@@ -656,7 +656,7 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
 }
 
 static void init(void) {
-    tick_timer_service_subscribe(SECOND_UNIT | MINUTE_UNIT, tick_handler);
+    tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
 
     #if defined(PBL_HEALTH)
     init_sleep_data();
